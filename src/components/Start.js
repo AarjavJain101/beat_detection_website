@@ -1,29 +1,50 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Start = (props) => {
-    const { play, handleStart, handleStop, startAudio, stopAudio } = props;
+    const RATE = 48000;
+    const CHUNK_SIZE = 1024;
+
+    const { startAudio, stopAudio, getAmplitudeData } = props;
 
     const [audioContext, setAudioContext] = useState(null);
+    const [isRunning, setIsRunning] = useState(false);
 
-    console.log(`Music is ${play ? "Start" : "Stop"}`);
+    let animationFrameId;
 
     const handleStartButton = async () => {
-        handleStart();
-        const context = new AudioContext();
-        setAudioContext(context);
-        await startAudio(context);
-        context.resume();
+        if (!audioContext) {
+            const context = new AudioContext();
+            setAudioContext(context);
+            await startAudio(context);
+            context.resume();
+            setIsRunning(true);
+            getAmplitudeData();
+        }
     };
 
     const handleStopButton = async () => {
-        handleStop();
         if (audioContext) {
             await stopAudio(audioContext);
             audioContext.close();
             setAudioContext(null);
+            setIsRunning(false);
+            cancelAnimationFrame(animationFrameId);
         }
     };
+
+    useEffect(() => {
+        let intervalId;
+
+        if (isRunning) {
+            intervalId = setInterval(() => {
+                getAmplitudeData();
+            }, (CHUNK_SIZE / RATE) * 1000);
+        }
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [isRunning, getAmplitudeData]);
 
     return (
         <div>
