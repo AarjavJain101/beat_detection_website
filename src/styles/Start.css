@@ -90,6 +90,7 @@
     border-radius: 25%;
     cursor: pointer;
     transition: 0.2s;
+    text-align: center;
 }
 
 .linked-in-btn:hover {
