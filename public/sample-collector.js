@@ -11,18 +11,8 @@ class SampleCollector extends AudioWorkletProcessor {
         const output = outputs[0];
         const outputChannelData = output[0];
 
-        for (let i = 0; i < 16; i++) {
-            const inputIndex = 8 * i - 1 >= 0 ? 8 * i - 1 : 0;
-
-            this._fullChunk[this._indexCount] = inputChannelData[inputIndex];
-            this._indexCount++;
-        }
-
-        if (this._indexCount === 128) {
-            this._indexCount = 0;
-            for (let i = 0; i < outputChannelData.length; i++) {
-                outputChannelData[i] = this._fullChunk[i] * 1000000;
-            }
+        for (let i = 0; i < outputChannelData.length; i++) {
+            outputChannelData[i] = inputChannelData[i] * 500000;
         }
 
         return true;

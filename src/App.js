@@ -1,4 +1,5 @@
 import Start from "./components/Start";
+import Color from "./components/Color";
 import "./styles/App.css";
 
 function App() {
@@ -8,6 +9,8 @@ function App() {
     let fftNode;
     let beatDetectionNode;
     let mediaStream;
+
+    let beats = [false, false, false];
 
     /**
      * startAudio
@@ -35,7 +38,30 @@ function App() {
         micNode.connect(collectionNode);
         collectionNode.connect(fftNode);
         fftNode.connect(beatDetectionNode);
-        beatDetectionNode.connect(context.destination);
+
+        beatDetectionNode.port.onmessage = ({ data }) => {
+            beats = data;
+            if (beats[0]) {
+                document.querySelector(".color-wrapper").style.backgroundColor = "red";
+                setTimeout(() => {
+                    document.querySelector(".color-wrapper").style.backgroundColor = "black";
+                }, 5);
+            }
+
+            if (beats[1]) {
+                document.querySelector(".color-wrapper").style.backgroundColor = "blue";
+                setTimeout(() => {
+                    document.querySelector(".color-wrapper").style.backgroundColor = "black";
+                }, 10);
+            }
+
+            if (beats[2]) {
+                document.querySelector(".color-wrapper").style.backgroundColor = "pink";
+                setTimeout(() => {
+                    document.querySelector(".color-wrapper").style.backgroundColor = "black";
+                }, 2);
+            }
+        };
     };
 
     /**
@@ -78,14 +104,17 @@ function App() {
     const getAmplitudeData = () => {
         const bufferLength = fftNode.frequencyBinCount;
         const dataArray = new Float32Array(bufferLength);
-        fftNode.getFloatFrequencyData(dataArray);
+        fftNode.getFloatTimeDomainData(dataArray);
 
-        beatDetectionNode.port.postMessage(dataArray);
+        beatDetectionNode.port.postMessage(dataArray[0] !== 0 ? dataArray : false);
     };
 
     return (
         <div className="App">
             <Start startAudio={startAudio} stopAudio={stopAudio} getAmplitudeData={getAmplitudeData}></Start>
+            <div className="color-wrapper">
+                <Color></Color>
+            </div>
         </div>
     );
 }
