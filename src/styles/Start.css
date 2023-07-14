@@ -82,12 +82,12 @@
 .linked-in-btn {
     width: 60px;
     height: 60px;
-    font-size: 42px;
+    font-size: 50px;
     font-weight: 600;
     background-color: white;
     color: black;
     border: none;
-    border-radius: 25%;
+    border-radius: 10%;
     cursor: pointer;
     transition: 0.2s;
     text-align: center;
