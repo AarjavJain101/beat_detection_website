@@ -7,12 +7,14 @@ const TOTAL_SUB_BANDS = 128;
 // Define constants using parameters
 const HISTORY_CHUNKS = 60;
 
-/**
- * Detects in the incoming 128 samples and posts a message containing what beat was detected
- *
- * @class BeatDetector
- * @extends AudioWorkletProcessor
- */
+/**************************************************************
+ *                                                            *
+ * Detects in the incoming 128 samples and posts a message    *
+ * containing what beat was detected                          *
+ *                                                            *
+ * @class BeatDetector                                        *
+ * @extends AudioWorkletProcessor                             *
+ **************************************************************/
 class BeatDetector extends AudioWorkletProcessor {
     constructor() {
         super();
@@ -34,7 +36,7 @@ class BeatDetector extends AudioWorkletProcessor {
     }
 
     // ===========================================================================
-    // Function: Calculates the energy
+    // Method: Calculates the energy
     // Input:    FFT'd audio data
     // Return:   List energy for each frequency bin (multiple of 375)
     getEnergy(audio_data_fft) {
@@ -49,7 +51,7 @@ class BeatDetector extends AudioWorkletProcessor {
     }
 
     // ===========================================================================
-    // Function:  Checks if a beat has occurred and makes that position in the arryay true
+    // Method:  Checks if a beat has occurred and makes that position in the arryay true
     // Algorithm: First normalize by dividing by max energy (from instant energy or energy history)
     //            Then check if the instant energy is greater than a certain threshold based on variance
     // Input:     Instant energy and the energy history
@@ -107,7 +109,7 @@ class BeatDetector extends AudioWorkletProcessor {
     }
 
     // ===========================================================================
-    // Function:  Calculate the energy in the clap range
+    // Method:  Calculate the energy in the clap range
     // Input:     Instant energy
     // Return:    Weighted average of the clap energy
     getClapEnergy(instant_energy) {
@@ -120,7 +122,7 @@ class BeatDetector extends AudioWorkletProcessor {
     }
 
     // ===========================================================================
-    // Function:  Calculate the energy in the hihat
+    // Method:  Calculate the energy in the hihat
     // Input:     Instant energy
     // Return:    Weighted average of the hihat energy
     getHiHatEnergy(instant_energy) {
@@ -128,7 +130,7 @@ class BeatDetector extends AudioWorkletProcessor {
     }
 
     // ===========================================================================
-    // Function:  Calculates the mathematical variance of an array
+    // Method:  Calculates the mathematical variance of an array
     // Input:     The array to take the variance of
     // Return:    The variance
     calculateVariance(array) {
@@ -144,7 +146,7 @@ class BeatDetector extends AudioWorkletProcessor {
     }
 
     // ===========================================================================
-    // Function:  Appends the array and shifts all values down
+    // Method:  Appends the array and shifts all values down
     // Input:     The array to be changed and the new value to be added on
     // Return:    The edited array
     addAndShift(array, newValue) {
@@ -153,7 +155,7 @@ class BeatDetector extends AudioWorkletProcessor {
     }
 
     // ===========================================================================
-    // Function:  Confirms if the current detected beat is within an acceptable range of previous beats
+    // Method:  Confirms if the current detected beat is within an acceptable range of previous beats
     // Input:     Energy of the current detected beat and the energy history of previusly detected beats
     // Return:    True if the history is less than 20 beats or the detected beat exceeds the threshold and False if not
     confirmBeat(current_detected_beat, detected_beat_history) {
@@ -174,6 +176,7 @@ class BeatDetector extends AudioWorkletProcessor {
         }
     }
 
+    // Main processing method
     process(inputs, outputs) {
         this.port.onmessage = ({ data }) => {
             // First check for real data and fill the history

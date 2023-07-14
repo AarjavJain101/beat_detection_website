@@ -10,6 +10,7 @@ function App() {
     let beatDetectionNode;
     let mediaStream;
 
+    // Declare beat detection array. Index 0 = bass, Index 1 = clao, Index 2 = hihat
     let beats = [false, false, false];
 
     /**
@@ -21,13 +22,16 @@ function App() {
      * @param {AudioContext} context - The AudioContext object in Web Audio API.
      * @returns {Promise} A Promise that resolves once the audio processing is started.
      * @example
-     * // Example usage:
+     * Example usage:
      * startAudio(audioContext);
      */
     const startAudio = async (context) => {
-        // Add the worklet module, create and connect analysis nodes
+        // Add the AudioWorklet Nodes
         await context.audioWorklet.addModule("audio-processor.js");
         await context.audioWorklet.addModule("sample-collector.js");
+
+        // Create the Stream, the mic node, the sample collector node, the fft analyser
+        // and the beat detection node
         mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
         micNode = context.createMediaStreamSource(mediaStream);
         collectionNode = new AudioWorkletNode(context, "sample-collector");
@@ -35,10 +39,12 @@ function App() {
         fftNode.fftSize = 256;
         beatDetectionNode = new AudioWorkletNode(context, "beat-detector");
 
+        // Connect the nodes
         micNode.connect(collectionNode);
         collectionNode.connect(fftNode);
         fftNode.connect(beatDetectionNode);
 
+        // Upon getting the detected beats, flash colors by changing the background color
         beatDetectionNode.port.onmessage = ({ data }) => {
             beats = data;
             if (beats[0]) {
@@ -101,6 +107,17 @@ function App() {
         }
     };
 
+    /**
+     * getAmplitudeData
+     *
+     * Retrieves fft amplitude data from the analyser node and passes it
+     * to the audio processor worklet. If data is not recieved then false is sent instead
+     *
+     * @returns {void}
+     * @example
+     * // Example usage:
+     * getAmplitudeData();
+     */
     const getAmplitudeData = () => {
         const bufferLength = fftNode.frequencyBinCount;
         const dataArray = new Float32Array(bufferLength);

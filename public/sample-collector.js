@@ -1,9 +1,15 @@
+/**************************************************************
+ *                                                            *
+ * The SampleCollector class will change its output to be the *
+ * incoming mic audio data amplified by 500000                *
+ *                                                            *
+ *                                                            *
+ * @class SampleCollector                                     *
+ * @extends AudioWorkletProcessor                             *
+ **************************************************************/
 class SampleCollector extends AudioWorkletProcessor {
     constructor() {
         super();
-        this._fullChunk = Array(128).fill(0);
-        this._indexCount = 0;
-        this._fullCounter = 0;
     }
 
     process(inputs, outputs) {

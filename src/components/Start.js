@@ -1,31 +1,41 @@
+// PURPOSE: Begin the page with instruction, the start and stop buttons, and social links
+// FUNCTION: Handles the logic for starting the audio pipline and stopping it
+
 import React, { useState, useEffect } from "react";
 import GitHubImage from "../media/github.png";
 import ProfilePicture from "../media/Profile_Picture.jpg";
 import "../styles/Start.css";
 
 const Start = (props) => {
+    // Declare constants to use for how often to call getAmplitudeData
     const RATE = 48000;
     const CHUNK_SIZE = 1024;
 
+    // De-construct properties
     const { startAudio, stopAudio, getAmplitudeData } = props;
 
+    // useStates for creating and closing audio contexts
     const [audioContext, setAudioContext] = useState(null);
     const [isRunning, setIsRunning] = useState(false);
 
+    // Used for requesting and stopping animation frames for the getAmplitudeData function
     let animationFrameId;
-
+    // Handles the start button click event.
     const handleStartButton = async () => {
+        // If there is no audio context, create a new one and start the audio processing.
         if (!audioContext) {
             const context = new AudioContext();
             setAudioContext(context);
             await startAudio(context);
             context.resume();
             setIsRunning(true);
-            getAmplitudeData();
+            getAmplitudeData(); // Retrieve initial amplitude data.
         }
     };
 
+    // Handles the stop button click event.
     const handleStopButton = async () => {
+        // If there is an audio context, stop the audio processing, close the context, and reset the state.
         if (audioContext) {
             await stopAudio(audioContext);
             audioContext.close();
@@ -39,12 +49,14 @@ const Start = (props) => {
         let intervalId;
 
         if (isRunning) {
+            // Start a periodic interval to retrieve amplitude data at a specific interval.
             intervalId = setInterval(() => {
-                getAmplitudeData();
+                getAmplitudeData(); // Retrieve amplitude data at each interval.
             }, (CHUNK_SIZE / RATE) * 1000);
         }
 
         return () => {
+            // Clean up the interval when the component unmounts or when isRunning changes.
             clearInterval(intervalId);
         };
     }, [isRunning, getAmplitudeData]);
