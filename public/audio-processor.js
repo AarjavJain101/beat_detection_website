@@ -212,7 +212,6 @@ class BeatDetector extends AudioWorkletProcessor {
                 if (this._chunks_processed - this._bass_chunk > 4) {
                     if (this._beat_history[0].length >= 5) {
                         if (this.confirmBeat(this._instant_energy[0], this._beat_history[0])) {
-                            console.log(`Bass ${this._chunks_processed} Energy ${this._instant_energy[0]}`);
                             this._final_detection[0] = true;
                             this._bass_chunk = this._chunks_processed;
                         }
@@ -232,7 +231,6 @@ class BeatDetector extends AudioWorkletProcessor {
                 if (this._chunks_processed - this._clap_chunk > 4) {
                     if (this._beat_history[1].length >= 3) {
                         if (this.confirmBeat(this._clap_energy * 1.6, this._beat_history[1])) {
-                            console.log(`Clap ${this._chunks_processed} Energy ${this._clap_energy}`);
                             this._final_detection[1] = true;
                             this._clap_chunk = this._chunks_processed;
                         }
@@ -248,7 +246,6 @@ class BeatDetector extends AudioWorkletProcessor {
                 if (this._chunks_processed - this._hihat_chunk > 4) {
                     if (this._beat_history[2].length >= 6) {
                         if (this.confirmBeat(this._hihat_energy * 1.6, this._beat_history[2])) {
-                            console.log(`HiHat ${this._chunks_processed} Energy ${this._hihat_energy}`);
                             this._final_detection[2] = true;
                             this._hihat_chunk = this._chunks_processed;
                         }
