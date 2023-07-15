@@ -228,7 +228,7 @@ class BeatDetector extends AudioWorkletProcessor {
                 this._sub_band_beat[CLAP_RANGE_LOW + 3] &&
                 this._sub_band_beat[CLAP_RANGE_LOW + 6]
             ) {
-                if (this._chunks_processed - this._clap_chunk > 4) {
+                if (this._chunks_processed - this._clap_chunk > 15) {
                     if (this._beat_history[1].length >= 3) {
                         if (this.confirmBeat(this._clap_energy * 1.6, this._beat_history[1])) {
                             this._final_detection[1] = true;
