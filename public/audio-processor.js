@@ -58,6 +58,9 @@ class BeatDetector extends AudioWorkletProcessor {
     // Return:    True if a beat occurred, otherwise False
     checkBeat(instant_energy, energy_history, sub_band_beat) {
         const instant_energy_f = new Array(TOTAL_SUB_BANDS).fill(0);
+        const energy_history_f = new Array(HISTORY_CHUNKS)
+            .fill(0)
+            .map(() => new Array(TOTAL_SUB_BANDS).fill(0));
 
         // Find the max
         const max_instant = Math.max.apply(null, instant_energy);
@@ -78,18 +81,25 @@ class BeatDetector extends AudioWorkletProcessor {
             instant_energy_f[i] = instant_energy[i] / max;
         }
 
+        // Normalize the energy history
+        for (let i = 0; i < HISTORY_CHUNKS; i++) {
+            for (let j = 0; j < TOTAL_SUB_BANDS; j++) {
+                energy_history_f[i][j] = energy_history[i][j] / max;
+            }
+        }
+
         // Calculate the thresholds based on energy history
         const thresholds = new Array(TOTAL_SUB_BANDS).fill(0);
         const average_energies = new Array(TOTAL_SUB_BANDS).fill(0);
 
         for (let i = 0; i < TOTAL_SUB_BANDS; i++) {
             for (let j = 0; j < HISTORY_CHUNKS; j++) {
-                average_energies[i] += energy_history[j][i];
+                average_energies[i] += energy_history_f[j][i];
             }
             average_energies[i] = average_energies[i] / HISTORY_CHUNKS;
 
             for (let j = 0; j < HISTORY_CHUNKS; j++) {
-                thresholds[i] += Math.pow(energy_history[j][i] - average_energies[i], 2);
+                thresholds[i] += Math.pow(energy_history_f[j][i] - average_energies[i], 2);
             }
             thresholds[i] = thresholds[i] / HISTORY_CHUNKS;
             thresholds[i] = 27.0 * thresholds[i] + 1.2;
@@ -202,6 +212,7 @@ class BeatDetector extends AudioWorkletProcessor {
                 if (this._chunks_processed - this._bass_chunk > 4) {
                     if (this._beat_history[0].length >= 5) {
                         if (this.confirmBeat(this._instant_energy[0], this._beat_history[0])) {
+                            console.log(`Bass ${this._chunks_processed} Energy ${this._instant_energy[0]}`);
                             this._final_detection[0] = true;
                             this._bass_chunk = this._chunks_processed;
                         }
@@ -221,6 +232,7 @@ class BeatDetector extends AudioWorkletProcessor {
                 if (this._chunks_processed - this._clap_chunk > 4) {
                     if (this._beat_history[1].length >= 3) {
                         if (this.confirmBeat(this._clap_energy * 1.6, this._beat_history[1])) {
+                            console.log(`Clap ${this._chunks_processed} Energy ${this._clap_energy}`);
                             this._final_detection[1] = true;
                             this._clap_chunk = this._chunks_processed;
                         }
@@ -236,6 +248,7 @@ class BeatDetector extends AudioWorkletProcessor {
                 if (this._chunks_processed - this._hihat_chunk > 4) {
                     if (this._beat_history[2].length >= 6) {
                         if (this.confirmBeat(this._hihat_energy * 1.6, this._beat_history[2])) {
+                            console.log(`HiHat ${this._chunks_processed} Energy ${this._hihat_energy}`);
                             this._final_detection[2] = true;
                             this._hihat_chunk = this._chunks_processed;
                         }
