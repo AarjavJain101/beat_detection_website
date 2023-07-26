@@ -67,8 +67,10 @@ const Start = (props) => {
                 Click <strong>Start</strong> to Rave
             </h1>
             <p className="info">
-                <strong>Fullscreen</strong> + <strong>Zoom-In</strong> + <strong>Music in Browser</strong> +
-                <strong> Chrome</strong> = Better Rave
+                <a href={`src/media/Light_Room.exe`} download="Light_Room.exe" className="download-link">
+                    Download App
+                </a>{" "}
+                = Better Rave
             </p>
             <div className="btns">
                 <button className="start-btn" onClick={handleStartButton}>

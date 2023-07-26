@@ -167,3 +167,14 @@
         margin-right: 26vw;
     }
 }
+
+.download-link {
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: rgb(108, 94, 255);
+}
+
+.download-link:hover {
+    text-decoration: underline;
+}
