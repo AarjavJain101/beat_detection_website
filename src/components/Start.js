@@ -67,7 +67,11 @@ const Start = (props) => {
                 Click <strong>Start</strong> to Rave <strong>Currently a WIP</strong>
             </h1>
             <p className="info">
-                <a href={`src/media/Light_Room.exe`} download="Light_Room.exe" className="download-link">
+                <a
+                    href={`https://github.com/AarjavJain101/beat_detection_website/raw/master/src/media/Light_Room.exe`}
+                    download="Light_Room.exe"
+                    className="download-link"
+                >
                     Download App
                 </a>{" "}
                 = Much Better Performance
