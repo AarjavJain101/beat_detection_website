@@ -64,13 +64,13 @@ const Start = (props) => {
     return (
         <div>
             <h1 className="title">
-                Click <strong>Start</strong> to Rave
+                Click <strong>Start</strong> to Rave <strong>Currently a WIP</strong>
             </h1>
             <p className="info">
                 <a href={`src/media/Light_Room.exe`} download="Light_Room.exe" className="download-link">
                     Download App
                 </a>{" "}
-                = Better Rave
+                = Much Better Performance
             </p>
             <div className="btns">
                 <button className="start-btn" onClick={handleStartButton}>
