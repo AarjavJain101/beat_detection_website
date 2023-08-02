@@ -64,7 +64,7 @@ const Start = (props) => {
     return (
         <div>
             <h1 className="title">
-                Click <strong>Start</strong> to Rave <strong>Currently a WIP</strong>
+                <strong>Download App Below!</strong> Orrr Click <strong>Start</strong> to Rave.
             </h1>
             <p className="info">
                 <a
@@ -74,7 +74,7 @@ const Start = (props) => {
                 >
                     Download App
                 </a>{" "}
-                = Much Better Performance
+                = Way Better Experience
             </p>
             <div className="btns">
                 <button className="start-btn" onClick={handleStartButton}>
@@ -84,7 +84,7 @@ const Start = (props) => {
                     Stop
                 </button>
             </div>
-            <p className="socials-text">Check out my other projects: </p>
+            <p className="socials-text">Check out the GitHub for synched lyrics: </p>
             <div className="socials-container">
                 <a
                     href="https://www.linkedin.com/in/aarjav-jain-734b8b204/"
@@ -98,7 +98,7 @@ const Start = (props) => {
                     </button>
                 </a>
                 <a
-                    href="https://github.com/AarjavJain101"
+                    href="https://github.com/AarjavJain101/Beat-Detector"
                     className="socials-github"
                     target="_blank"
                     rel="noreferrer"
