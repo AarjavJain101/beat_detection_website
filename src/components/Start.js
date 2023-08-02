@@ -107,7 +107,7 @@ const Start = (props) => {
                     <img src={GitHubImage} alt="Github" className="socials-github-img" />
                 </a>
                 <a
-                    href="https://aarjavjainubc.com/"
+                    href="https://aarjavjain.site/"
                     className="socials-website"
                     target="_blank"
                     rel="noreferrer"
