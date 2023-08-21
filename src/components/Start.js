@@ -64,7 +64,7 @@ const Start = (props) => {
     return (
         <div>
             <h1 className="title">
-                <strong>Download App Below!</strong> Orrr Click <strong>Start</strong> to Rave.
+                <strong>Download App Below!</strong> Or Click <strong>Start</strong> to Rave.
             </h1>
             <p className="info">
                 <a
